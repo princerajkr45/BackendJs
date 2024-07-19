@@ -3,13 +3,19 @@
   "version": "1.0.0",
   "description": "a mini video app",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon src/index.js"
   },
   "keywords": [
     "javascript",
     "backend"
   ],
   "author": "prince kumar",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.1.4",
+    "pretier": "^0.0.1",
+    "prettier": "^3.3.3"
+  }
 }
