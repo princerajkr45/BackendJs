@@ -2,10 +2,10 @@
 import connectDB from "./db/index.js";
 import app from "./app.js"
 
-
+const port = process.env.PORT || 3000
 connectDB().then(()=>{
-    app.listen(process.env.PORT || 3000,()=>{
-        console.log(`server listening on ${process.env.PORT}`)
+    app.listen(port,()=>{
+        console.log(`server listening on http://localhost:${port}`)
     });
 }).catch((err)=>{
     console.log("mongodb connection error: " + err)
@@ -17,6 +17,7 @@ connectDB().then(()=>{
 
 /*
 import express from "express";
+
 const app = express();
 const port= process.env.PORT || 3000;
 ; (async () => {
