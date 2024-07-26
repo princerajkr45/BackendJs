@@ -222,7 +222,7 @@ const changeCurrentPassword = asyncHandler(async (req, res) => {
 
     const user = await User.findById(req.user?._id)
 
-    const isOldPaswordCorrect = await User.isPasswordCorrect(oldPassword)
+    const isOldPaswordCorrect = await user.isPasswordCorrect(oldPassword)
 
     if (!isOldPaswordCorrect) {
         throw new ApiError(401, "Invalid old  password")
@@ -249,7 +249,7 @@ const updateAccountDetails = asyncHandler(async (req, res) => {
         throw new ApiError(400, "Full name or email is required")
     }
 
-    User.findOneAndDelete(
+    const user = await User.findOneAndUpdate(
         req.user?._id,
         {
             $set: {
@@ -259,6 +259,8 @@ const updateAccountDetails = asyncHandler(async (req, res) => {
         },
         { new: true }
     ).select("-password")
+
+
 
     return res.status(200)
         .json(new ApiResponse(200, user, "Account Updated successfully"))
@@ -329,6 +331,7 @@ const updateUserCoverImage = asyncHandler(async (req, res) => {
 const getUserChannelProfile = asyncHandler(async (req, res) => {
 
     const { username } = req.params
+    console.log(username)
 
     if (!username?.trim()) {
         throw new ApiError(400, "Username is missing")
@@ -367,7 +370,7 @@ const getUserChannelProfile = asyncHandler(async (req, res) => {
                 },
                 isSubscribed: {
                     $cond: {
-                        if: { $in: [re.user?._id, "$subscribers.subscriber"] },
+                        if: { $in: [req.user?._id, "$subscribers.subscriber"] },
                         then: true,
                         else: false
                     }
@@ -387,11 +390,11 @@ const getUserChannelProfile = asyncHandler(async (req, res) => {
             }
         }
     ])
-
+    console.log(channel)
     if(!channel?.length){
         throw new ApiError(400,"Channel does not exist")
     }
-    console.log(channel)
+    
 
     return res.status(200)
     .json(new ApiResponse(200,channel[0],"User channel fetched successfully"))
